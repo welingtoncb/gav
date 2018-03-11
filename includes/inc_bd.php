@@ -23,14 +23,14 @@
 			{
 				case "MYSQL" : 
 					$this->Erro = false;
-					$this->Identificador = mysqli_connect($this->Local,$this->Usuario,$this->Senha,true);
+					$this->Identificador = mysqli_connect($this->Local,$this->Usuario,$this->Senha, $this->Banco);
 					if ($this->Identificador == false)
 					{
 						$this->Erro = true;
 						$this->CodigoErro = mysqli_errno();
 						$this->DescricaoErro = mysqli_error();
 					}
-					mysqli_select_db($this->Banco);
+					mysqli_select_db($this->Identificador,$this->Banco);
 					break;
 				
 				case "MSSQL" : 
@@ -67,7 +67,7 @@
 			{
 				case "MYSQL" :					
 					$this->Banco = $sNomeBanco;
-					mysqli_select_db($sNomeBanco,$this->Identificador);
+					mysqli_select_db($this->Identificador,$sNomeBanco);
 					break;
 				
 				case "MSSQL" :					
@@ -84,7 +84,7 @@
 			{
 				case "MYSQL" : 
 					$this->Erro = false;
-					$this->Resultado = mysqli_query($sQuery, $this->Identificador);
+					$this->Resultado = mysqli_query($this->Identificador,$sQuery);
 					
 					if($this->Resultado == false)
 					{

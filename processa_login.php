@@ -1,4 +1,6 @@
 <?php
+        header("Content-Type: text/html; charset=iso-8859-1",true);
+        
 	include ("includes/inc_geral.php");
 	
 	$goBD = new db();
@@ -8,16 +10,16 @@
 	$goBD->Banco = $gsNomeBanco1; 
 	$goBD->Tipo = $gsTipoBanco1; 
 	$goBD->Conecta();
-	$goBD->AcessaBanco("gav");
+	$goBD->AcessaBanco($gsNomeBanco1);
 
 	$sql = "SELECT CodUsuario, Login FROM usuario WHERE Login='".$_POST["tbUsuario"]."' AND Senha = PASSWORD('".$_POST["tbSenha"]."')";	
 	$rst = $goBD->Consulta($sql);
-	if($goBD->Erro) 
+        if($goBD->Erro) 
 	{
 		/* Erro ao acessar tabela de usuário */
 		$goBD->Desconecta();	
 		echo '<script language="Javascript">'.chr(10);
-			echo 'alert("Erro ao acessar tabela de usuario!")'.chr(10);
+			echo 'alert("Erro ao acessar tabela de usuário!")'.chr(10);
 			echo 'window.location.href="login.php"'.chr(10);
 		echo "</script>".chr(10);
 	}
@@ -25,14 +27,17 @@
 	if($goBD->EOF($rst))
 	{
 		/* Usuário e/ou senha inválidos */
-		$goBD->Desconecta();	
-		echo '<script language="Javascript">'.chr(10);
+		$goBD->Desconecta();
+		echo '<script language="javascript">'.chr(10);
 			echo 'alert("Usuário ou senha inválidos!")'.chr(10);
 			echo 'window.location.href="login.php"'.chr(10);
-		echo "</script>".chr(10);
+		echo '</script>'.chr(10);
 	}
-	else
-	{
-		header("Location: cad_produto.php");
+	else{
+            
+            $_SESSION['CodUsuario'] = $goBD->Registro["CodUsuario"];
+            
+            $goBD->Desconecta();
+            header("Location: cad_produto.php?".SID);
 	}
 ?>
